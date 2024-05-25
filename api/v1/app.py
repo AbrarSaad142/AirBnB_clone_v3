@@ -2,6 +2,7 @@
 """This script defines a Flask application"""
 from flask import Flask
 from models import storage
+from flask import jsonify
 import os
 from api.v1.views import app_views
 
@@ -18,6 +19,7 @@ app.register_blueprint(app_views)
 def teardown(exception):
     """Calls storage close method"""
     storage.close()
+
 
 @app.errorhandler(404)
 def error_404(exception):
