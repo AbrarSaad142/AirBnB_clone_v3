@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """This script defines a Flask application"""
 from flask import Flask
-from flask import make_response
 from models import storage
 import os
 from api.v1.views import app_views
@@ -21,8 +20,8 @@ def teardown(exception):
     storage.close()
 
 @app.errorhandler(404)
-def handler(exception):
-    return make_response(jsonify({"error": "Not found"}, 404))
+def error_404(exception):
+    return jsonify({"error": "Not found"}), 404
 
 
 if __name__ == "__main__":
