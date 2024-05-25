@@ -19,9 +19,10 @@ app.register_blueprint(app_views)
 def teardown(exception):
     """Calls storage close method"""
     storage.close()
-@app.error_handler(404)
-def handler(error):
-    return make_response(jsonify({"error": "Not found"}, 404)
+
+@app.errorhandler(404)
+def handler(exception):
+    return make_response(jsonify({"error": "Not found"}, 404))
 
 
 if __name__ == "__main__":
