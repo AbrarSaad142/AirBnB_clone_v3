@@ -2,7 +2,12 @@
 """This script defines a Flask application"""
 from flask import Flask
 from models import storage
+import os
 from api.v1.views import app_views
+
+port= os.getenv("HBNB_API_PORT", "5000")
+host= os.getenv("HBNB_API_HOST", "0.0.0.0")
+
 
 app = Flask(__name__)
 
@@ -16,4 +21,4 @@ def teardown(exception):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000, threaded=True)
+    app.run(debug=True, host=host, port=port, threaded=True)
