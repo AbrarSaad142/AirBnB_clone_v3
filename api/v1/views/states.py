@@ -1,23 +1,21 @@
 #!/usr/bin/python3
 """This script defines State"""
 from api.v1.views import app_views
-from flask import jsonify, request, abort
+from flask import jsonify, abort, request
 from models import storage
 from models.state import State
 
 
 @app_views.route('/states', methods=['GET'])
-def get_states():
-    """define states"""
-    my_states = []
-    for state in storage.all(State).values():
-        my_states.append(state.to_dict())
+def all_states():
+    """get State objects"""
+    my_states = [state.to_dict() for state in storage.all(State).values()]
     return jsonify(my_states)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'])
 def get_state(state_id):
-    """define state by id"""
+    """get State object"""
     my_state = storage.get(State, state_id)
     if my_state is None:
         abort(404)
@@ -26,7 +24,7 @@ def get_state(state_id):
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
-    """Delete state"""
+    """Deletes a State"""
     my_state = storage.get(State, state_id)
     if my_state is None:
         abort(404)
@@ -36,27 +34,28 @@ def delete_state(state_id):
 
 
 @app_views.route('/states', methods=['POST'])
-def do_state():
-    """Create state"""
+def create_state():
+    """Creates state"""
+"""Creates state"""
     j = request.get_json()
     if j is None:
-        return jsonify({"Not a JSON"}), 400
+        abort(400, "Not a JSON")
     if 'name' not in j:
-        return jsonify({"Missing name"}), 400
-    new_state = State(**j)
-    new_state.save()
-    return jsonify(new_state.to_dict()), 201
+        abort(400, "Missing name")
+    new = State(**j)
+    new.save()
+    return jsonify(new.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'])
 def update_state(state_id):
-    """Update state"""
+    """Updates a State"""
     my_state = storage.get(State, state_id)
     if my_state is None:
         abort(404)
     j = request.get_json()
     if j is None:
-        return jsonify({"Not a JSON"}), 400
+         abort(400, "Not a JSON")
     for key, value in j.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(my_state, key, value)
