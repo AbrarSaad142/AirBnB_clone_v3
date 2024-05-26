@@ -84,6 +84,7 @@ class FileStorage:
         all_classes = classes.values()
 
         if not cls:
+<<<<<<< HEAD
             count = 0
             for clas in all_classes:
                 count += len(self.all(clas).values())
@@ -91,3 +92,13 @@ class FileStorage:
             count = len(self.all(cls).values())
 
         return count
+=======
+            cls_instance = self.all()
+            return len(cls_instance)
+        for clas, val in classes.items():
+            if cls == clas or cls == val:
+                all_cls_ins = self.all(cls)
+                return len(all_cls_ins)
+        if cls not in classes.values():
+            return
+>>>>>>> 93b03e95b93bb02fd85b45cd216ef4881d49a2aa
