@@ -7,7 +7,7 @@ from models.city import City
 from models.state import State
 
 
-@app_views.route('/states/<state_id>/cities', strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
 def get_cities_by_states(state_id):
     """Retrieves the list of all City objects of a State"""
     state = storage.get(State, state_id)
@@ -17,7 +17,7 @@ def get_cities_by_states(state_id):
     return jsonify(cities)
 
 
-@app_views.route('/cities/<city_id>', strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
 def get_city(city_id):
     """Retrieves a City object"""
     city = storage.get(City, city_id)
