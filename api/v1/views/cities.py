@@ -44,6 +44,8 @@ def delete_city(city_id):
                  methods=['POST'], strict_slashes=False)
 def create_city(state_id):
     """Creates a City"""
+    if request.content_type != 'application/json':
+        return abort(400, 'Not a JSON')
     state = storage.get(State, state_id)
     if not state:
         return abort(404)
