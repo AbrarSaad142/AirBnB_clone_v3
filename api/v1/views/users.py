@@ -64,7 +64,7 @@ def Update_usere(user_id):
         if not request.get_json():
             return abort(400, 'Not a JSON')
         data = request.get_json()
-        Ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
+        Ignore_keys = ['id', 'email', 'created_at', 'updated_at']
         for key, value in data.items():
             if key not in Ignore_keys:
                 setattr(user, key, value)
