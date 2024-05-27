@@ -30,6 +30,7 @@ def delete_usere(user_id):
     if user:
         storage.delete(user)
         storage.save()
+        return jsonify({}), 200
     else:
         return abort(404)
 
