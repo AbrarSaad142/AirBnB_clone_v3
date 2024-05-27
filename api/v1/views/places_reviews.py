@@ -46,6 +46,8 @@ def delete_review(review_id):
                  methods=['POST'], strict_slashes=False)
 def create_review(place_id):
     """Creates a Review"""
+    if request.content_type != 'application/json':
+        return abort(400, 'Not a JSON')
     place = storage.get(Place, place_id)
     if not place:
         return abort(404)
@@ -84,4 +86,4 @@ def update_reviews(review_id):
         review.save()
         return jsonify(review.to_dict()), 200
     else:
-        return abort(400)
+        return abort(404)
