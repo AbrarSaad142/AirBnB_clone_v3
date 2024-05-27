@@ -7,7 +7,7 @@ from models.amenity import Amenity
 
 
 @app_views.route('/amenities', methods=['GET'])
-def all_states():
+def all_amenity():
     """get State objects"""
     amen = [amenity.to_dict() for amenity in storage.all(Amenity).values()]
     return jsonify(amen)
@@ -34,7 +34,7 @@ def delete_amenity(amenity_id):
 
 
 @app_views.route('/amenities', methods=['POST'])
-def create_state():
+def create_amenity():
     """Creates amenity"""
     a = request.get_json()
     if a is None:
@@ -54,7 +54,7 @@ def update_amenity(amenity_id):
         abort(404)
     a = request.get_json()
     if a is None:
-         abort(400, "Not a JSON")
+        abort(400, "Not a JSON")
     for key, value in j.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(amen, key, value)
