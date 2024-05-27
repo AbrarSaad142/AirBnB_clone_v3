@@ -56,7 +56,7 @@ def create_review(place_id):
     data = request.get_json()
     user = storage.get(User, data['user_id'])
     if not user:
-        return abort(404)
+        return abort(400)
     if 'text' not in data:
         return abort(400, 'Missing text')
     data['place-id'] = place_id
