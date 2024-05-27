@@ -60,7 +60,7 @@ def create_city(state_id):
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
-def update_city(city_id):
+def update_review(city_id):
     """Update a City"""
     if request.content_type != 'application/json':
         return abort(400, 'Not a JSON')
