@@ -67,7 +67,7 @@ def create_review(place_id):
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'], strict_slashes=False)
-def update_city(review_id):
+def update_reviews(review_id):
     """Update a review"""
     if request.content_type != 'application/json':
         return abort(400, 'Not a JSON')
