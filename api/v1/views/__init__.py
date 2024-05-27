@@ -10,3 +10,4 @@ if app_views is not None:
     from api.v1.views.states import *
     from api.v1.views.users import *
     from api.v1.views.reviews import *
+    from api.v1.views.amenities import *
