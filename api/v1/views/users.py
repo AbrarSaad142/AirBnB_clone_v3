@@ -43,7 +43,7 @@ def Create_usere():
     if not request.get_json():
         return abort(400, 'Not a JSON')
     data = request.get_json()
-    if 'email'  not in data:
+    if 'email' not in data:
         return abort(400, 'Missing email')
     if 'password' not in data:
         return abort(400, 'Missing password')
