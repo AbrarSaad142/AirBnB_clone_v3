@@ -67,7 +67,7 @@ def update_review(city_id):
     city = storage.get(City, city_id)
     if city:
         if not request.get_json():
-            return abort(404, 'Not a JSON')
+            return abort(400, 'Not a JSON')
         data = request.get_json()
         Ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
 
