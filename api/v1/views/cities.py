@@ -77,4 +77,4 @@ def update_review(city_id):
         city.save()
         return jsonify(city.to_dict()), 200
     else:
-        return abort(400)
+        return abort(404)
