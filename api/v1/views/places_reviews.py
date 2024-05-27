@@ -22,7 +22,7 @@ def get_reviews_by_places(place_id):
 @app_views.route('/reviews/<review_id>', methods=['GET'], strict_slashes=False)
 def get_review(review_id):
     """Retrieves a Review object"""
-    review = storage.get(review, review_id)
+    review = storage.get(Review, review_id)
     if review:
         return jsonify(review.to_dict())
     else:
@@ -33,7 +33,7 @@ def get_review(review_id):
                  strict_slashes=False)
 def delete_review(review_id):
     """Delete review"""
-    review = storage.get(review, review_id)
+    review = storage.get(Review, review_id)
     if review:
         storage.delete(review)
         storage.save()
