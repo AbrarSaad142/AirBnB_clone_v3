@@ -62,7 +62,7 @@ def create_city(state_id):
 def update_city(city_id):
     """Update a City"""
     if request.content_type != 'application/json':
-        return abort(400, 'NOT A JSON')
+        return abort(400, 'Not a JSON')
     city = storage.get(City, city_id)
     if city:
         if not request.get_json():

@@ -39,9 +39,9 @@ def delete_usere(user_id):
 def Create_usere():
     """Create a User object"""
     if request.content_type != 'application/json':
-        return abort(400, 'Not a Json')
+        return abort(400, 'Not a JSON')
     if not request.get_json():
-        return abort(400, 'Not a Json')
+        return abort(400, 'Not a JSON')
     data = request.get_json()
     if 'email' not in data:
         return abort(400, 'Missing email')
@@ -60,9 +60,9 @@ def Update_usere(user_id):
     user = storage.get(User, user_id)
     if user:
         if request.content_type != 'application/json':
-            return abort(400, 'Not a Json')
+            return abort(400, 'Not a JSON')
         if not request.get_json():
-            return abort(400, 'Not a Json')
+            return abort(400, 'Not a JSON')
         data = request.get_json()
         Ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
         for key, value in data.items():
