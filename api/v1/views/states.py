@@ -7,7 +7,8 @@ from models.state import State
 from api.v1.views import app_views
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app_views.route('/states', methods=['GET'], strict_slashes=False,
+                 strict_slashes=False)
 def get_all_states():
     """Retrieves the list of all State objects"""
     states = storage.all(State).values()
@@ -40,6 +41,10 @@ def delete_state(state_id):
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
     """Creates a new State"""
+    if request.content_type != 'application/json':
+        return abort(400, 'Not a JSON')
+    if not request.get_json():
+        return abort(400, 'Not a JSON')
     if request.content_type != 'application/json':
         return abort(400, 'Not a JSON')
     if not request.get_json():
