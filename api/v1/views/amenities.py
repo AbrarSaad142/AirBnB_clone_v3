@@ -25,7 +25,7 @@ def get_amenity(amenity_id):
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'])
 def delete_amenity(amenity_id):
-    """Delete a specific Amenity object"""
+    """Delete Amenity"""
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
