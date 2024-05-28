@@ -44,7 +44,7 @@ def create_amenity():
         abort(400, "Missing name")
     new = Amenity(**data)
     new.save()
-    return jsonify(new_amenity.to_dict()), 201
+    return jsonify(new.to_dict()), 201
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'])
