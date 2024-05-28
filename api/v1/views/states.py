@@ -35,38 +35,50 @@ def delete_state(state_id):
 
 
 
-@app_views.route('/states/', methods=['POST'], strict_slashes=False)
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
 def post_state():
-    """create a state"""
-    data = request.get_json()
+    """Create a state"""
+    if request.content_type != 'application/json':
+        abort(400, description="Not a JSON")
 
-    if data is None:
-        abort(400, "Not a JSON")
+    try:
+        data = request.get_json()
+    except Exception:
+        abort(400, description="Not a JSON")
 
-    if data.get("name") is None:
-        abort(400, "Missing name")
+    if not data:
+        abort(400, description="Not a JSON")
 
-    new = State(**data)
-    new.save()
+    if 'name' not in data:
+        abort(400, description="Missing name")
 
-    return jsonify(new.to_dict()), 201
+    new_state = State(**data)
+    storage.new(new_state)
+    storage.save()
+    return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def put_state(state_id):
-    """update a state"""
+    """Update a state"""
     state = storage.get(State, state_id)
     if state is None:
-        return abort(404)
+        abort(404)
 
-    d = request.get_json()
+    if request.content_type != 'application/json':
+        abort(400, description="Not a JSON")
 
-    if d is None:
-        abort(400, "Not a JSON")
+    try:
+        data = request.get_json()
+    except Exception:
+        abort(400, description="Not a JSON")
 
-    for k, v in d.items():
-        if k not in ['id', 'created_at', 'updated_at']:
-            setattr(state, k, v)
+    if not data:
+        abort(400, description="Not a JSON")
+
+    for key, value in data.items():
+        if key not in ['id', 'created_at', 'updated_at']:
+            setattr(state, key, value)
     state.save()
-
+    
     return jsonify(state.to_dict()), 200
