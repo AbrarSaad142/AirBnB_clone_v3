@@ -27,5 +27,5 @@ def state():
     states = {}
     for key, value in classes.items():
         states[key] = storage.count(value)
-    
+
     return jsonify(states)
