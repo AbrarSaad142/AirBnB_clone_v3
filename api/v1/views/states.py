@@ -1,21 +1,22 @@
 #!/usr/bin/python3
-"""This script defines State"""
+"""This module handle states"""
+
 from api.v1.views import app_views
 from flask import jsonify, abort, request
-from models import storage
 from models.state import State
+from models import storage
 
 
-@app_views.route('/states', methods=['GET'])
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
 def all_states():
-    """get State objects"""
-    my_states = [state.to_dict() for state in storage.all(State).values()]
-    return jsonify(my_states)
+    """Returns list of states"""
+    my_states = storage.all(State)
+    return jsonify([state.to_dict() for state in my_states.values()])
 
 
 @app_views.route('/states/<state_id>', methods=['GET'])
 def get_state(state_id):
-    """get State object"""
+    """get state."""
     my_state = storage.get(State, state_id)
     if my_state is None:
         abort(404)
@@ -24,39 +25,39 @@ def get_state(state_id):
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
-    """Deletes a State"""
+    """Delete state"""
     my_state = storage.get(State, state_id)
     if my_state is None:
         abort(404)
-    storage.delete()
+    storage.delete(my_state)
     storage.save()
     return jsonify({}), 200
 
 
-@app_views.route('/states', methods=['POST'])
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
-    """Creates state"""
-    j = request.get_json()
-    if j is None:
+    """Create a new state with data sent in the request"""
+    data = request.get_json(silent=True)
+    if not data:
         abort(400, "Not a JSON")
-    if 'name' not in j:
+    if 'name' not in data:
         abort(400, "Missing name")
-    new = State(**j)
+    new = State(**data)
     new.save()
     return jsonify(new.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'])
 def update_state(state_id):
-    """Updates a State"""
+    """Update state"""
     my_state = storage.get(State, state_id)
     if my_state is None:
         abort(404)
-    j = request.get_json()
-    if j is None:
+    data = request.get_json(silent=True)
+    if not data:
         abort(400, "Not a JSON")
-    for key, value in j.items():
-        if key not in ['id', 'created_at', 'updated_at']:
+    for key, value in data.items():
+        if key not in ("id", "created_at", "updated_at"):
             setattr(my_state, key, value)
     my_state.save()
     return jsonify(my_state.to_dict()), 200
