@@ -6,13 +6,20 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app.route('/api/v1/states', methods=['GET'], strict_slashes=False)
 def all_states():
-    """ return list of State """
-    my_states = []
-    for state in storage.all(State).values():
-        my_states.append(state.to_dict())
+    """Return list of State"""
+    my_states = [state.to_dict() for state in storage.all(State).values()]
     return jsonify(my_states)
+
+
+@app.route('/api/v1/states/<state_id>', methods=['GET'], strict_slashes=False)
+def get_state(state_id):
+    """Return a specific State object by its state_id."""
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+    return jsonify(state.to_dict())
 
 
 @app_views.route('/states/<state_id>', methods=['DELETE'],
@@ -26,12 +33,6 @@ def delete_state(state_id):
     storage.save()
     return jsonify({}), 200
 
-
-@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
-def get_state(state_id):
-    """get State"""
-    state = storage.get(State, state_id)
-    return abort(404) if state is None else jsonify(state.to_dict())
 
 
 @app_views.route('/states/', methods=['POST'], strict_slashes=False)
