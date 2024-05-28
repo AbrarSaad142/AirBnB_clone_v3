@@ -7,12 +7,12 @@ from models.state import State
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
-def get_all_states():
+def all_states():
     """return list of states"""
-    all_states = []
+    list_states = []
     for state in storage.all(State).values():
-        all_states.append(state.to_dict())
-    return jsonify(all_states)
+        list_states.append(state.to_dict())
+    return jsonify(list_states)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
@@ -34,27 +34,19 @@ def delete_state(state_id):
     return jsonify({}), 200
 
 
-
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def post_state():
     """Create a state"""
-    if request.content_type != 'application/json':
-        abort(400, description="Not a JSON")
 
-    try:
-        data = request.get_json()
-    except Exception:
-        abort(400, description="Not a JSON")
+    data = request.get_json()
+    if data is None:
+        return abort(400, description="Not a JSON")
 
-    if not data:
-        abort(400, description="Not a JSON")
-
-    if 'name' not in data:
-        abort(400, description="Missing name")
+    if data.get("name") is None:
+        return abort(400, description="Missing name")
 
     new_state = State(**data)
-    storage.new(new_state)
-    storage.save()
+    new_state.save()
     return jsonify(new_state.to_dict()), 201
 
 
@@ -65,20 +57,12 @@ def put_state(state_id):
     if state is None:
         abort(404)
 
-    if request.content_type != 'application/json':
-        abort(400, description="Not a JSON")
-
-    try:
-        data = request.get_json()
-    except Exception:
-        abort(400, description="Not a JSON")
-
-    if not data:
-        abort(400, description="Not a JSON")
-
+    data = request.get_json()
+    if data is None:
+        return abort(400, description="Not a JSON")
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
     state.save()
-    
+
     return jsonify(state.to_dict()), 200
