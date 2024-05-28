@@ -1,0 +1,18 @@
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Other files and directories to ignore
+.env
+*.env
+.DS_Store
+*.log
+*.sqlite3
+
+# Ignore virtual environment
+venv/
+env/
+
+# Ignore IDE specific files
+.vscode/
+.idea/
