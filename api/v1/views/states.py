@@ -8,56 +8,55 @@ from models.state import State
 
 @app_views.route('/states', methods=['GET'])
 def all_states():
-    """get State objects"""
-    list_states = []
-    for state in storage.all(State).values():
-        list_states.append(state.to_dict())
+    """Get all State objects"""
+    list_states = [state.to_dict() for state in storage.all(State).values()]
     return jsonify(list_states)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'])
 def get_state(state_id):
-    """get State object"""
+    """Get a State object by ID"""
     state = storage.get(State, state_id)
-    return abort(404) if state is None else jsonify(state.to_dict())
+    if state is None:
+        abort(404)
+    return jsonify(state.to_dict())
 
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
-    """Deletes a State"""
+    """Deletes a State by ID"""
     state = storage.get(State, state_id)
     if state is None:
-        return abort(404)
-    storage.delete(state)
+        abort(404)
+    state.delete()
     storage.save()
     return jsonify({}), 200
 
 
 @app_views.route('/states', methods=['POST'])
 def create_state():
-    """Creates state"""
+    """Creates a new state"""
     data = request.get_json()
-    if data is None:
+    if not data:
         abort(400, "Not a JSON")
-    if data.get("name") is None:
+    if "name" not in data:
         abort(400, "Missing name")
     new_state = State(**data)
     new_state.save()
-
     return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'])
 def update_state(state_id):
-    """Updates a State"""
+    """Updates a State by ID"""
     state = storage.get(State, state_id)
     if state is None:
-        return abort(404)
+        abort(404)
 
     data = request.get_json()
-
-    if data is None:
-         abort(400, "Not a JSON")
+    if not data:
+        abort(400, "Not a JSON")
+    
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
