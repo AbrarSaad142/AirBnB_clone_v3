@@ -15,7 +15,7 @@ def all_amenities():
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'])
 def get_amenity(amenity_id):
-    """Retrieve a specific Amenity object"""
+    """Retrieve Amenity"""
     amenity = storage.get(Amenity, amenity_id)
     if amenity is not None:
         return jsonify(amenity.to_dict())
