@@ -25,7 +25,7 @@ def get_state(state_id):
 @app_views.route('/states/<state_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_state(state_id):
-    """deletes a state"""
+    """ deletes state """
     state = storage.get(State, state_id)
     if state is None:
         return abort(404)
@@ -40,13 +40,14 @@ def post_state():
 
     data = request.get_json()
     if data is None:
-        return abort(400, description="Not a JSON")
+        abort(400, description="Not a JSON")
 
     if data.get("name") is None:
-        return abort(400, description="Missing name")
+        abort(400, description="Missing name")
 
     new_state = State(**data)
     new_state.save()
+    
     return jsonify(new_state.to_dict()), 201
 
 
@@ -55,11 +56,11 @@ def put_state(state_id):
     """Update a state"""
     state = storage.get(State, state_id)
     if state is None:
-        abort(404)
+        return abort(404)
 
     data = request.get_json()
     if data is None:
-        return abort(400, description="Not a JSON")
+        abort(400, description="Not a JSON")
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
